@@ -1,0 +1,392 @@
+{
+	"info": {
+		"_postman_id": "6ef32a8f-0d19-4615-966d-43b7a25a5b12",
+		"name": "Openweathermap Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Ping",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "activateDateVerification",
+							"value": "1",
+							"description": "1 for activate, 0 for deactivate",
+							"type": "text"
+						},
+						{
+							"key": "emissionDateLimit",
+							"value": "2021/01/01",
+							"description": "aaaa/mm/gg",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://localhost:3003/ping",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login valida",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "apitest",
+							"description": "oppure admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "api",
+							"description": "oppure administrator",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://localhost:3003/login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login non valida",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "admin",
+							"description": "valore corretto: admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "administratordddd",
+							"description": "valore corretto: administrator",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://localhost:3003/login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cambio password",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "oldPassword",
+							"value": "sdsd",
+							"type": "text"
+						},
+						{
+							"key": "newPassword",
+							"value": "administrator",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU4NWRiMzBmLTI2NWItNDcyNC04OTQ2LTJmOGRmZmM3YTUyMiIsImVtaXNzaW9uRGF0ZSI6IjIwMjItMDUtMTNUMjE6MTQ6MDAuNjIzWiIsImlhdCI6MTY1MjQ3NjQ0MCwiZXhwIjoxNjUyNDc2NTAwfQ.IArszbzQDetcEdH5EaUIGIFxStf7aXConYcmbPw6KRM",
+							"description": "Occhio che i tokens durano 60 secondi.\nPotrebbe essere che non venga effettuata l'operazione, perché sarà già scaduto il token JWT!",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://localhost:3003/changePassword",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"changePassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rotta Inesistente",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "admins",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "administrator",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://localhost:3003/random",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"random"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TokenCheck",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4NWRiMzBmLTI2NWItNDcyNC04OTQ2LTJmOGRmZmM3YTUyMiIsImVtaXNzaW9uRGF0ZSI6IjIwMjItMDUtMTNUMTA6MTE6MTYuMzY3WiIsImlhdCI6MTY1MjQzNjY3NiwiZXhwIjo0Nzc0NTAwNjc2fQ.beYRglaR_ULtAUv5oiBIsi3MwcTUPES4uMAM--vI8No",
+							"description": "JWT Token",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://localhost:3003/checkToken",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"checkToken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "setJWTDateLimitValidation",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "activateDateVerification",
+							"value": "1",
+							"description": "1 for activate, 0 for deactivate",
+							"type": "text"
+						},
+						{
+							"key": "emissionDateLimit",
+							"value": "2021/01/01",
+							"description": "aaaa/mm/gg",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://localhost:3003/setJWTDateLimitValidation",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"setJWTDateLimitValidation"
+					],
+					"query": [
+						{
+							"key": "activateDateVerification",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "emissionDateLimit",
+							"value": "2022/01/01",
+							"description": "aaaa/mm/gg",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "provokeException",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "activateDateVerification",
+							"value": "1",
+							"description": "1 for activate, 0 for deactivate",
+							"type": "text"
+						},
+						{
+							"key": "emissionDateLimit",
+							"value": "2021/01/01",
+							"description": "aaaa/mm/gg",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://localhost:3003/provokeException",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"provokeException"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
