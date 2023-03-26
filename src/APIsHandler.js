@@ -4,6 +4,9 @@ import { Database } from './Database.js'
 import { Result } from './Result.js';
 import { SecurityService } from './SecurityService.js';
 
+//const OPENWEATHER_API_ENDPOINT = "https://api.openweathermap.org/data/3.0/onecall";
+const OPENWEATHER_API_ENDPOINT = "https://api.openweathermap.org/data/2.5/forecast";
+
 class APIsHandler {
   constructor () {
     this._databaseInstance = new Database();
@@ -61,6 +64,14 @@ class APIsHandler {
     const result = { checkVerificationSetTo: this._securityService._checkDateFlag, limitDate: this._securityService._dateLimit };
 
     return new Result(setResult, result);
+  }
+
+  async getWeatherData (req, apiKey) {
+    const lat = req.body?.latitude;
+    const lon = req.body?.longitude;
+    const completeApiEndpoint = `${OPENWEATHER_API_ENDPOINT}?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+
+    return new Result(true, { res: completeApiEndpoint });
   }
 
   async defaultHandler (req, res) {

@@ -5,8 +5,10 @@ import * as required from 'express-async-errors';
 import { APIsHandler } from './APIsHandler.js';
 import * as https from 'https';
 import fs from 'fs';
+import axios from 'axios';
 const keyCert = fs.readFileSync('./certs/server.key');
 const cert = fs.readFileSync('./certs/server.cert');
+const apiKey = '5cd23da46625fea2cc1eaa7c4249d4a3';
 
 class Server {
   constructor () {
@@ -28,6 +30,7 @@ class Server {
     app.post('/changePassword', async (req, res) => await this._changePasswordHandler(req, res));
     app.post('/checkToken', async (req, res) => await this._checkToken(req, res));
     app.post('/setJWTDateLimitValidation', async (req, res) => await this._setJWTDateLimitValidation(req, res));
+    app.get('/getWeatherData', async (req, res) => await this._getWeatherData(req, apiKey));
     app.get('/ping', async (req, res) => await this._ping(req, res));
     app.post('/provokeException', async (req, res) => { throw new Error('Exception') });
 
@@ -73,6 +76,12 @@ class Server {
 
   async _setJWTDateLimitValidation (req, res) {
     const result = await this._apisHandler.setJWTVerificationParameters(req.body.activateDateVerification, req.body.emissionDateLimit);
+    res.status(200).json(result);
+  }
+
+  async _getWeatherData (req, res) {
+    const apiEndpoint = await this._apisHandler.getWeatherData(req, apiKey);
+    const result = await axios.get(apiEndpoint.payload.res);
     res.status(200).json(result);
   }
 

@@ -120,4 +120,15 @@ describe('Unit tests of APIsHandler', () => {
       assert.deepEqual(_sut._securityService._dateLimit, null);
     });
   });
+  describe('getWeatherData', () => {
+    it('getWeatherData, GIVEN valid input parameters, SHOULD return api endpoint string', async () => {
+      const obj = { body: { latitude: '10.10', longitude: '20.20', } };
+      const _sut = new APIsHandler();
+      const result = await _sut.getWeatherData(obj, 'myApiKey');
+
+      assert.notDeepEqual(result, null);
+      assert.deepEqual(result.completedOperation, true);
+      assert.deepEqual(result.payload.res, 'https://api.openweathermap.org/data/2.5/forecast?lat=10.10&lon=20.20&appid=myApiKey');
+    });
+  });
 });
