@@ -6,8 +6,12 @@ import { APIsHandler } from './APIsHandler.js';
 import * as https from 'https';
 import fs from 'fs';
 import axios from 'axios';
+import cors from 'cors';
 const keyCert = fs.readFileSync('./certs/server.key');
 const cert = fs.readFileSync('./certs/server.cert');
+const corsOptions = {
+  origin: '*',
+}
 const apiKey = '5cd23da46625fea2cc1eaa7c4249d4a3';
 
 class Server {
@@ -30,7 +34,8 @@ class Server {
     app.post('/changePassword', async (req, res) => await this._changePasswordHandler(req, res));
     app.post('/checkToken', async (req, res) => await this._checkToken(req, res));
     app.post('/setJWTDateLimitValidation', async (req, res) => await this._setJWTDateLimitValidation(req, res));
-    app.get('/getWeatherData', async (req, res) => await this._getWeatherData(req, apiKey));
+    app.get('/getWeatherData'/*, this._apisHandler.checkToken*/, async (req, res) => await this._getWeatherData(req, res, apiKey));
+    app.get('/getWeatherDataNoAuth', cors(corsOptions), async (req, res) => await this._getWeatherDataNoAuth(req, res, apiKey));
     app.get('/ping', async (req, res) => await this._ping(req, res));
     app.post('/provokeException', async (req, res) => { throw new Error('Exception') });
 
@@ -79,10 +84,26 @@ class Server {
     res.status(200).json(result);
   }
 
-  async _getWeatherData (req, res) {
+  async _getWeatherData (req, res, apiKey) {
     const apiEndpoint = await this._apisHandler.getWeatherData(req, apiKey);
-    const result = await axios.get(apiEndpoint.payload.res);
-    res.status(200).json(result);
+    const isJwtPresent = await this._apisHandler.checkToken(req, res);
+
+    if(isJwtPresent.completedOperation === false) {
+      res.status(401).json(isJwtPresent);
+    }
+    else {
+      const resultW = await axios.get(apiEndpoint.payload.res);
+
+      res.status(200).json(resultW.data);
+
+    }
+
+  }
+  async _getWeatherDataNoAuth (req, res, apiKey) {
+    const apiEndpoint = await this._apisHandler.getWeatherData(req, apiKey);
+    const resultW = await axios.get(apiEndpoint.payload.res);
+
+    res.status(200).json(resultW.data);
   }
 
   async _ping (req, res) {
