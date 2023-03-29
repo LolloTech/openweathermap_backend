@@ -7,12 +7,14 @@ import * as https from 'https';
 import fs from 'fs';
 import axios from 'axios';
 import cors from 'cors';
+import dotenv from 'dotenv';
 const keyCert = fs.readFileSync('./certs/server.key');
 const cert = fs.readFileSync('./certs/server.cert');
 const corsOptions = {
   origin: '*',
 }
-const apiKey = '5cd23da46625fea2cc1eaa7c4249d4a3';
+dotenv.config();
+const apiKey = process.env.API_KEY;
 
 class Server {
   constructor () {
