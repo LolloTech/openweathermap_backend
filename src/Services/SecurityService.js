@@ -15,14 +15,17 @@ class SecurityService {
 
   async checkJwtIsValid (token) {
     try {
-      const result = await jwt.verify(token, jwtSimplePrivateKey);
+      const result = await jwt.verify(token, jwtSimplePrivateKey, {});
+      const isTokenExpired = Date.now() >= jwt.verify(token, jwtSimplePrivateKey).exp * 1000;
       if (result && this._checkDateFlag && this._dateLimit) {
-        if (new Date(this._dateLimit) < new Date(result.emissionDate)) {
+        return !(new Date(this._dateLimit) < new Date(result.emissionDate));
+      }
+      if (isTokenExpired === true) {
           return false;
         }
+      else {
         return true;
       }
-      return true;
     } catch (err) {
       return false;
     }

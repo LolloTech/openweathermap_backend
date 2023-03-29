@@ -1,6 +1,6 @@
 import sinon from 'sinon';
-import { Database } from '../../src/Database.js'
-import { APIsHandler } from '../../src/APIsHandler.js';
+import { UserRepository } from '../../src/Repositories/UserRepository.js'
+import { APIsHandler } from '../../src/Services/APIsHandler.js';
 import assert from 'assert';
 import mocha from 'mocha';
 
@@ -12,13 +12,13 @@ describe('Unit tests of APIsHandler', () => {
     it('loginHandler, GIVEN valid user, SHOULD give back a valid token', async () => {
       const obj = { body: { username: 'dummy', password: '1234' } };
       const mock = sinon
-        .mock(Database.prototype)
+        .mock(UserRepository.prototype)
         .expects('findByUsernameAndPassword')
         .withExactArgs('dummy', '1234')
         .returns([])
         .atLeast(1);
       const mock2 = sinon
-        .mock(Database.prototype)
+        .mock(UserRepository.prototype)
         .expects('findByUsername')
         .withExactArgs('dummy')
         .returns([{ id: '1' }])
@@ -29,8 +29,8 @@ describe('Unit tests of APIsHandler', () => {
       assert.notDeepEqual(result, null);
       assert.deepEqual(result.completedOperation, true);
       // Removing mocks for next tests
-      Database.prototype.findByUsernameAndPassword.restore();
-      Database.prototype.findByUsername.restore();
+      UserRepository.prototype.findByUsernameAndPassword.restore();
+      UserRepository.prototype.findByUsername.restore();
     });
     it('loginHandler, GIVEN non-existing user, SHOULD give back an operation not completed', async () => {
       const obj = { body: { username: 'dummy', password: '1234' } };
@@ -55,7 +55,7 @@ describe('Unit tests of APIsHandler', () => {
       const _sut = new APIsHandler();
 
       const mock = sinon
-        .mock(Database.prototype)
+        .mock(UserRepository.prototype)
         .expects('changePassword')
         .withExactArgs('dummy', '1234', '4321')
         .returns(true)
@@ -63,14 +63,14 @@ describe('Unit tests of APIsHandler', () => {
       const result = await _sut.changePassword(obj);
       assert.deepEqual(result.completedOperation, true);
       // Removing mocks for next tests
-      Database.prototype.changePassword.restore();
+      UserRepository.prototype.changePassword.restore();
     });
     it('changePasswordHandler, GIVEN existing user and no valid token, SHOULD not changepass and return false', async () => {
       const obj = { body: { username: 'dummy', oldPassword: '1234', newPassword: '4321' } };
       const _sut = new APIsHandler();
 
       const mock = sinon
-        .mock(Database.prototype)
+        .mock(UserRepository.prototype)
         .expects('changePassword')
         .withExactArgs('dummy', '1234', '4321')
         .returns(true)
@@ -78,14 +78,14 @@ describe('Unit tests of APIsHandler', () => {
       const result = await _sut.changePassword(obj);
       assert.deepEqual(result.completedOperation, false);
       // Removing mocks for next tests
-      Database.prototype.changePassword.restore();
+      UserRepository.prototype.changePassword.restore();
     });
     it('changePasswordHandler, GIVEN correct user but wrong oldpassword, SHOULD not changepass', async () => {
       const obj = { body: { username: 'dummy', oldPassword: '1234', newPassword: '4321' } };
       const _sut = new APIsHandler();
 
       const mock = sinon
-        .mock(Database.prototype)
+        .mock(UserRepository.prototype)
         .expects('changePassword')
         .withExactArgs('dummy', '1234', '4321')
         .returns(false)
@@ -93,7 +93,7 @@ describe('Unit tests of APIsHandler', () => {
       const result = await _sut.changePassword(obj);
       assert.deepEqual(result.completedOperation, false);
       // Removing mocks for next tests
-      Database.prototype.changePassword.restore();
+      UserRepository.prototype.changePassword.restore();
     });
   });
   describe('setJWTVerificationParametersHandler', () => {
@@ -118,6 +118,17 @@ describe('Unit tests of APIsHandler', () => {
       assert.deepEqual(result.completedOperation, false);
       assert.deepEqual(_sut._securityService._checkDateFlag, false);
       assert.deepEqual(_sut._securityService._dateLimit, null);
+    });
+  });
+  describe('getWeatherData', () => {
+    it('getWeatherData, GIVEN valid input parameters, SHOULD return api endpoint string', async () => {
+      const obj = { body: { latitude: '10.10', longitude: '20.20', } };
+      const _sut = new APIsHandler();
+      const result = await _sut.getWeatherData(obj, 'myApiKey');
+
+      assert.notDeepEqual(result, null);
+      assert.deepEqual(result.completedOperation, true);
+      assert.deepEqual(result.payload.res, 'https://api.openweathermap.org/data/2.5/forecast?lat=10.10&lon=20.20&appid=myApiKey');
     });
   });
 });

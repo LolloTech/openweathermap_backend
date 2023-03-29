@@ -1,12 +1,14 @@
 'use strict';
 
-import { Database } from './Database.js'
-import { Result } from './Result.js';
+import { UserRepository } from '../Repositories/UserRepository.js'
+import { Result } from '../ValueObjects/Result.js';
 import { SecurityService } from './SecurityService.js';
+
+const OPENWEATHER_API_ENDPOINT = "https://api.openweathermap.org/data/2.5/forecast";
 
 class APIsHandler {
   constructor () {
-    this._databaseInstance = new Database();
+    this._databaseInstance = new UserRepository();
     this._securityService = new SecurityService();
 
     // Binding async functions to current this
@@ -51,9 +53,10 @@ class APIsHandler {
   }
 
   async checkToken (req, res) {
-    const result = await this._securityService.checkJwtIsValid(req.body.token);
+    const token = this._extractToken(req);
+    const result = await this._securityService.checkJwtIsValid(token);
 
-    return new Result(await this._securityService.checkJwtIsValid(req.body.token), { isTokenValid: result });
+    return new Result(result, { isTokenValid: result });
   }
 
   async setJWTVerificationParameters (activateDateVerification, emissionDateLimit) {
@@ -63,12 +66,33 @@ class APIsHandler {
     return new Result(setResult, result);
   }
 
+  async getWeatherData (req, apiKey) {
+    const lat = req.query?.latitude || req.body?.latitude;
+    const lon = req.query?.longitude || req.body?.longitude;
+    const completeApiEndpoint = `${OPENWEATHER_API_ENDPOINT}?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+
+    return new Result(true, { res: completeApiEndpoint });
+  }
+
   async defaultHandler (req, res) {
-    return new Result(false, { error: 'Internal Server Error' });
+    return new Result(false, { error: 'Internal ExpressServer Error' });
   }
 
   listen () {
     return this.app.listen(this.port, this.responseFunction);
+  }
+
+  _extractToken (req) {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+      return req.headers.authorization.split(' ')[1];
+    }
+    else if (req.body && req.body.token) {
+      return req.body.token;
+    }
+    else if (req.query && req.query.token) {
+      return req.query.token;
+    }
+    return null;
   }
 }
 

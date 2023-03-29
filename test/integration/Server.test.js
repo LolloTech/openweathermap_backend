@@ -1,13 +1,13 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { Server } from '../../src/Server.js';
+import { ExpressServer } from '../../src/Services/ExpressServer.js';
 import mocha from "mocha";
 const should = chai.should();
 const describe = mocha.describe;
 const before = mocha.before;
 const after = mocha.after;
 const it = mocha.it;
-const server = new Server();
+const server = new ExpressServer();
 
 chai.use(chaiHttp);
 

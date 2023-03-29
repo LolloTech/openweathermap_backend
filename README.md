@@ -13,7 +13,7 @@ from the root folder of the project. Alternatively, you can run it with Docker, 
 # Mock up credentials with sql lite file
 Please note: these credentials are provided in the sql lite used for mocking the communication with a database.
 I thought about mock a database with sql lite, by passing the need of a real dbms system. For our purpose of testing some rest APIs, for now it is ok to do so.
-These credentials could be user for testing the various routes made available by Express in Server.js through RESTful API calls.
+These credentials could be user for testing the various routes made available by Express in ExpressServer.js through RESTful API calls.
 
 username: admin, password: administrator
 username: apitest, password: api
@@ -36,7 +36,7 @@ The acceptance of the JWT token can take place in two ways, at runtime (without 
 
 I tried to make the code as decoupled as possible between the various parts, in order to be able to perform as many unit tests as possible (I focused on service classes, and very little on infrastructure classes).
 
-For infrastructure classes (such as Server.js), I tried to perform as many integration tests as possible to cover all possible behaviors of all available routes.
+For infrastructure classes (such as ExpressServer.js), I tried to perform as many integration tests as possible to cover all possible behaviors of all available routes.
 
 # Tests execution
 npm run test: runs both integration and unit tests.
@@ -45,7 +45,7 @@ npm run test-integration: runs only integration tests.
 
 
 
-# Database, migrations, seeds (not necessary for this project, but I have included them for completeness)
+# UserRepository, migrations, seeds (not necessary for this project, but I have included them for completeness)
 
 #### Creating the sqlite database from scratch
 Go to the root folder of the project in the terminal and then run:
@@ -58,7 +58,7 @@ Go to the project's root folder with the terminal and then execute:
 ```
 npx knex  --knexfile ./db/knexfile.cjs seed:run
 ```
-#### Database drop
+#### UserRepository drop
 Go to the project's root folder with the terminal and then execute:
 ```
 npx knex  --knexfile ./db/knexfile.cjs migrate:rollback

@@ -1,6 +1,6 @@
 import assert from 'assert';
 import mocha from 'mocha';
-import { SecurityService } from '../../src/SecurityService.js';
+import { SecurityService } from '../../src/Services/SecurityService.js';
 
 const describe = mocha.describe;
 const it = mocha.it;

@@ -5,10 +5,18 @@ import * as required from 'express-async-errors';
 import { APIsHandler } from './APIsHandler.js';
 import * as https from 'https';
 import fs from 'fs';
+import axios from 'axios';
+import cors from 'cors';
+import dotenv from 'dotenv';
 const keyCert = fs.readFileSync('./certs/server.key');
 const cert = fs.readFileSync('./certs/server.cert');
+const corsOptions = {
+  origin: '*',
+}
+dotenv.config();
+const apiKey = process.env.API_KEY;
 
-class Server {
+class ExpressServer {
   constructor () {
     this.app = express();
     this._apisHandler = new APIsHandler();
@@ -28,6 +36,8 @@ class Server {
     app.post('/changePassword', async (req, res) => await this._changePasswordHandler(req, res));
     app.post('/checkToken', async (req, res) => await this._checkToken(req, res));
     app.post('/setJWTDateLimitValidation', async (req, res) => await this._setJWTDateLimitValidation(req, res));
+    app.get('/getWeatherData'/*, this._apisHandler.checkToken*/, async (req, res) => await this._getWeatherData(req, res, apiKey));
+    app.get('/getWeatherDataNoAuth', cors(corsOptions), async (req, res) => await this._getWeatherDataNoAuth(req, res, apiKey));
     app.get('/ping', async (req, res) => await this._ping(req, res));
     app.post('/provokeException', async (req, res) => { throw new Error('Exception') });
 
@@ -76,6 +86,28 @@ class Server {
     res.status(200).json(result);
   }
 
+  async _getWeatherData (req, res, apiKey) {
+    const apiEndpoint = await this._apisHandler.getWeatherData(req, apiKey);
+    const isJwtPresent = await this._apisHandler.checkToken(req, res);
+
+    if(isJwtPresent.completedOperation === false) {
+      res.status(401).json(isJwtPresent);
+    }
+    else {
+      const resultW = await axios.get(apiEndpoint.payload.res);
+
+      res.status(200).json(resultW.data);
+
+    }
+
+  }
+  async _getWeatherDataNoAuth (req, res, apiKey) {
+    const apiEndpoint = await this._apisHandler.getWeatherData(req, apiKey);
+    const resultW = await axios.get(apiEndpoint.payload.res);
+
+    res.status(200).json(resultW.data);
+  }
+
   async _ping (req, res) {
     res.status(200).json({ ok: true });
   }
@@ -94,4 +126,4 @@ class Server {
   }
 }
 
-export { Server };
+export { ExpressServer };

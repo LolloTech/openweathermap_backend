@@ -1,9 +1,9 @@
 'use strict'
 import knex from 'knex';
-import config from '../db/knexfile.cjs'
+import config from '../../db/knexfile.cjs'
 import bcrypt from 'bcryptjs'
 
-class Database {
+class UserRepository {
   constructor () {
     this.db = knex(config.development);
   }
@@ -48,4 +48,4 @@ class Database {
   }
 }
 
-export { Database };
+export { UserRepository };
