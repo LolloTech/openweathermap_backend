@@ -5,7 +5,7 @@ const myFormat = printf(({ timestamp, level, message, meta }) => {
     return `${timestamp}; ${level}; ${message}; ${meta? JSON.stringify(meta) : ''}`;
 });
 const Logger = createLogger({
-    level: "debug",
+    level: "info",
     format: combine(
         timestamp(),
         splat(),

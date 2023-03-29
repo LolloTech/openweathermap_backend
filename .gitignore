@@ -3,3 +3,4 @@ node_modules
 package-lock.json
 eslint-report.html
 .logs
+.logs/*.*
