@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
-import { ClientInterface } from './ClientInterface.js';
+import { IHttpClientService } from '../Interfaces/IHttpClientService.js';
 
-class Client extends ClientInterface {
+class HttpClientService extends IHttpClientService {
   async fetch (url, method, headers = { 'Content-Type': 'application/json' }, body = {}) {
     const init = {
       method,
@@ -19,4 +19,4 @@ class Client extends ClientInterface {
   }
 }
 
-export { Client };
+export { HttpClientService };

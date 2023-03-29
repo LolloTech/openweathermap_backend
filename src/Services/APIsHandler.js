@@ -1,14 +1,14 @@
 'use strict';
 
-import { Database } from './Database.js'
-import { Result } from './Result.js';
+import { UserRepository } from '../Repositories/UserRepository.js'
+import { Result } from '../ValueObjects/Result.js';
 import { SecurityService } from './SecurityService.js';
 
 const OPENWEATHER_API_ENDPOINT = "https://api.openweathermap.org/data/2.5/forecast";
 
 class APIsHandler {
   constructor () {
-    this._databaseInstance = new Database();
+    this._databaseInstance = new UserRepository();
     this._securityService = new SecurityService();
 
     // Binding async functions to current this
@@ -75,7 +75,7 @@ class APIsHandler {
   }
 
   async defaultHandler (req, res) {
-    return new Result(false, { error: 'Internal Server Error' });
+    return new Result(false, { error: 'Internal ExpressServer Error' });
   }
 
   listen () {

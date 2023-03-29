@@ -16,7 +16,7 @@ const corsOptions = {
 dotenv.config();
 const apiKey = process.env.API_KEY;
 
-class Server {
+class ExpressServer {
   constructor () {
     this.app = express();
     this._apisHandler = new APIsHandler();
@@ -126,4 +126,4 @@ class Server {
   }
 }
 
-export { Server };
+export { ExpressServer };
