@@ -8,6 +8,7 @@ import fs from 'fs';
 import axios from 'axios';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { Logger } from './Logger.js'
 const keyCert = fs.readFileSync('./certs/server.key');
 const cert = fs.readFileSync('./certs/server.cert');
 const corsOptions = {
@@ -24,6 +25,7 @@ class ExpressServer {
     this.httpServerInstance = null;
     this.responseFunction = () => {
       console.log(`Listening on port ${this._port}`);
+      Logger.info(`Listening on port ${this._port}`);
     };
   }
 
@@ -119,6 +121,7 @@ class ExpressServer {
   }
 
   async _defaultExceptionsHandler (err, req, res, next) {
+    Logger.error(`Error on request, exception: ${err}`);
     res.status(err.status || 500).json({
       message: err,
       error: err
