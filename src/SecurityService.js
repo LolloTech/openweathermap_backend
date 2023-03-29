@@ -3,7 +3,7 @@ const jwtSimplePrivateKey = '0xDEADBEEF';
 
 class SecurityService {
   constructor () {
-    this._checkDateFlag = true;
+    this._checkDateFlag = false;
     this._dateLimit = null;
   }
 
@@ -15,14 +15,12 @@ class SecurityService {
 
   async checkJwtIsValid (token) {
     try {
-      const result = await jwt.verify(token, jwtSimplePrivateKey, {},await function (err, decoded) {
-        const x = err;
-        // decoded undefined
-      });
+      const result = await jwt.verify(token, jwtSimplePrivateKey, {});
       const isTokenExpired = Date.now() >= jwt.verify(token, jwtSimplePrivateKey).exp * 1000;
-      //if (result && this._checkDateFlag && this._dateLimit) {
-      if (isTokenExpired === true && this._checkDateFlag) {
-        //if (new Date(this._dateLimit) < new Date(result.emissionDate)) {
+      if (result && this._checkDateFlag && this._dateLimit) {
+        return !(new Date(this._dateLimit) < new Date(result.emissionDate));
+      }
+      if (isTokenExpired === true) {
           return false;
         }
       else {

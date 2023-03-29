@@ -4,7 +4,6 @@ import { Database } from './Database.js'
 import { Result } from './Result.js';
 import { SecurityService } from './SecurityService.js';
 
-//const OPENWEATHER_API_ENDPOINT = "https://api.openweathermap.org/data/3.0/onecall";
 const OPENWEATHER_API_ENDPOINT = "https://api.openweathermap.org/data/2.5/forecast";
 
 class APIsHandler {
